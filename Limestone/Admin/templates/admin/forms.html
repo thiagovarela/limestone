@@ -1,0 +1,286 @@
+{% macro input(label, name, record, options) %}
+	
+    {% set value = record[name] %}
+    {% if options and options.type %}
+    	{% set type = options.type %}
+    	{% if type == 'password' %}
+	    	{% set value = null %}
+    	{% endif %}
+    {% endif %}
+    
+    
+	<div class="control-group">
+		<label class="control-label" for="{{ name }}">{{ label }}</label>
+		<div class="controls">
+			<input type="{{ type|default('text') }}" 
+				   class="{{ class|default('input-xlarge') }}" 
+				   id="{{ name }}" 
+				   value="{{ value }}" 
+				   name="{{ name }}" {% if options.required %} required {% endif %}
+				   {% if options.match %}
+				   data-validation-matches-match="{{ options.match }}"	
+				   {% endif %}
+				   />
+		</div>
+	</div>
+    
+{% endmacro %}
+
+{% macro checkbox(label, name, record, options) %}
+	
+		<div class="control-group">
+            <label class="control-label" for="{{ name }}">{{ label }}</label>
+            <div class="controls">
+              <label class="checkbox">
+                <input type="checkbox" id="{{ name }}" name="{{ name }}" 
+                {% if record and record[name] %} 
+                checked="{{ chk }}"
+                {% endif %}
+                >
+              </label>
+            </div>
+          </div>
+
+{% endmacro %}
+
+{% macro typeahead(label, name, url, label_property, record, options) %}
+	{% set value = record[label_property] %}
+	<div class="control-group">
+		<label class="control-label" for="{{ name }}">{{ label }}</label>
+		<div class="controls">
+			<input type="hidden" name="{{ name }}_id" id="{{ name }}_id" value="{{ record.id }}" />
+			<input type="text" 
+				   class="{{ class|default('input-xlarge') }}" 
+				   id="{{ name }}" 
+				   value="{{ value }}" 
+				   required="true"
+				   name="{{ name }}" />
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#{{ name }}').typeahead({
+			    source: function (typeahead, query) {
+			        return $.getJSON('{{ url }}', { query: query }, function (data) {
+			            return typeahead.process(data);
+			        });
+			    },
+			    onselect: function(obj) { 
+			    	$("#{{ name }}_id").attr("value", obj.id);		
+			    },
+			    property: '{{ label_property }}'
+			});
+		});
+		
+	</script>
+{% endmacro %}
+
+{% macro local_chosen(label, name, values, label_property, record, options) %}
+
+	{% set value = record[label_property] %}
+	{% if options and options.multiple %}
+		{% set multiple = 'multiple="multiple"'%}
+	{% endif %}
+	<div class="control-group">
+		<label class="control-label" for="{{ name }}">{{ label }}</label>
+		<div class="controls">
+			<select 
+				   id="{{ name }}"  
+				   data-placeholder="Selecione"
+				   class="{{ class|default('input-xlarge') }}" 
+				   required="true"
+				   {{  multiple }}
+				   name="{{ name }}">
+				   
+				   {% for key, value in values %}
+				   <option value="{{ key }}">{{ value }}</option>
+				   {% endfor %}
+				   
+				   </select>
+				   
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#{{ name }}').chosen({allow_single_deselect: true});
+		});
+		
+	</script>
+{% endmacro %}
+
+{% macro remote_chosen(label, name, url, label_property, record, options, label_function) %}
+	
+	{% if options and options.multiple %}
+		{% set multiple = 'multiple="multiple"'%}
+		{% set add_name = '[]'%}
+		{% set value = record %}
+	{% else %}
+		{% set value = record[label_property] %}
+	{% endif %}
+	<div class="control-group">
+		<label class="control-label" for="{{ name }}">{{ label }}</label>
+		<div class="controls">
+			<div class="input-append">
+			<select 
+				   id="{{ name }}"  
+				   data-placeholder="Selecione"
+				   class="{{ class|default('input-xlarge') }}" 
+				   {{ multiple }}
+				   name="{{ name }}{{add_name}}">
+				   </select>
+				   
+		     </div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$.getJSON('{{ url }}', null, function (data) {
+				{% if record and multiple %}
+					var selectedValues = [{{ record|join(",") }}];
+				{% else %} 
+					var selectedValues = [];
+				{% endif %}
+				for(var i = 0; i < data.length; i++) {
+					{% if record %}
+						{% if multiple %}
+							var selected = selectedValues.indexOf(parseInt(data[i].id)) >= 0 ? "selected" : "";
+						{% else %}
+							var selected = data[i].id == {{ record.id }} ? "selected" : "";
+						{% endif %}
+					{% else %}
+						var selected = "";
+					{% endif %}
+					
+					{% if label_function %}
+						var label_f = function(record) {
+							var fields = "{{label_function}}".split(",");
+							var values = [];
+							for(var i = 0; i < fields.length; i++) {
+								values.push(eval("record." + fields[i]));
+							}
+							return values.join(" - ");
+						};
+						var label = label_f(data[i]);
+					{% else %}
+						var label = data[i].{{ label_property }}
+					{% endif %}
+					
+					$('#{{ name }}').append("<option value='"+ data[i].id + "' "+ selected + " >" + label + "</option>");	
+				}	
+				$('#{{ name }}').chosen({allow_single_deselect: true});
+			});
+
+		});
+		
+	</script>
+{% endmacro %}
+
+{% macro datepicker(label, name, record, options) %}
+	{% set value = record[name] %}
+
+	<div class="control-group">
+		<label class="control-label" for="{{ name }}">{{ label }}</label>
+		<div class="controls">
+			<input type="text" 
+				   id="{{ name }}"
+				   value="{{ value }}"  
+				   class="{{ class|default('input-xlarge') }}" 
+				   name="{{ name }}" />
+				   
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#{{ name }}').datepicker({
+				format: "dd/mm/yyyy",
+				language: "br"
+			});
+		});
+		
+	</script>
+{% endmacro %}
+
+{% macro fileupload(label, name, files, options) %} 
+
+	{% if files and files|length > 0 %}
+		<ul class="thumbnails">
+		{% for file in files %}
+			  <li class="span3">
+			    <a href="#" class="thumbnail">
+			      <img src="{{ file.thumb }}" alt="">
+			    </a>
+			  </li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+		<div class="control-group">
+		<label class="control-label" for="{{ name }}">{{ label }}</label>
+		<div class="controls">
+			<input type="file"
+		    	   multiple="multiple"
+				   id="{{ name }}"  
+				   class="{{ class|default('input-xlarge') }}" 
+				   name="{{ name }}[]" />
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro image(label, name, files, options) %}
+	
+	{% if options and options.multiple %}
+		{% set multiple = 'multiple="multiple"'%}
+		{% if files and files|length > 0 %}
+			<ul class="thumbnails">
+			{% for file in files %}
+				  <li class="span3">
+				    <a href="#" class="thumbnail">
+				      <img src="{{ file.thumb }}" alt="">
+				    </a>
+				  </li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+	{% else %}
+		{% set imageUrl = files[name] %}
+	{% endif %}
+	
+	<div class="control-group">
+		<label class="control-label" for="{{ name }}">{{ label }}</label>
+		<div class="controls">
+			<input type="file"
+		    	   {{ multiple }}
+				   id="{{ name }}"  
+				   class="{{ class|default('input-xlarge') }}" 
+				   name="{{ name }}[]" />
+			{% if options and options.help %}
+				<span class="help-inline">{{ options.help }}</span>
+			{% endif %}
+		{% if imageUrl %}
+			<ul class="thumbnails">
+				  <li class="span3">
+				    <a href="#" class="thumbnail">
+				      <img src="{{ imageUrl }}" alt="">
+				    </a>
+				  </li>
+			</ul>	
+		{% endif %}
+		</div>
+		
+	</div>
+
+
+{% endmacro %}
+
+{% macro textarea(label, name, record, options) %}
+    {% set value = record[name] %}
+	<div class="control-group">
+		<label class="control-label" for="{{ name }}">{{ label }}</label>
+		<div class="controls">
+			<textarea class="{{ class|default('input-xlarge') }}" 
+				   id="{{ name }}" 
+				   name="{{ name }}" >{{ value }}</textarea>
+		</div>
+	</div>
+    
+{% endmacro %}
+

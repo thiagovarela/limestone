@@ -1,0 +1,7 @@
+{% macro boolean(value) %}
+	{% if value %}
+		<span class="label label-success">Sim</span>
+	{% else %}
+		<span class="label label-important">Não</span>
+	{% endif %}
+{% endmacro %}

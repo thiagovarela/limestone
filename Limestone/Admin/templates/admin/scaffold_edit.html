@@ -1,0 +1,30 @@
+{% extends 'admin/index.html' %}
+{% import 'admin/forms.html' as forms %}
+
+{% block page %}
+<div class="page-header">
+	<h3>{{ title }}</h3>
+</div>
+
+
+<div class="row">
+    <div class="span7 offset1">
+      <form class="form-horizontal well" action="" method="post" enctype="multipart/form-data">
+        
+        {% block formfields %}
+        {% endblock %}
+
+        <fieldset>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" name="save">Salvar</button>
+            <button type="submit" class="btn btn-primary">Salvar e adicionar outro</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+</div>
+
+{% endblock %}
+
+
+

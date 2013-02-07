@@ -1,0 +1,26 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+			<div class="row span5 offset3">
+				<div class="page-header">
+					<h1>{{ project_name }} - Login</h1>
+				</div>
+			</div>
+			{% if attempt %}
+			<div class="row span5 offset3">
+				<div class="alert alert-error">
+				  <button type="button" class="close" data-dismiss="alert">×</button>
+				  <strong>Erro!</strong> Usuário ou senha incorretos.
+				</div>
+			</div>
+			{% endif %}
+			<div class="row offset3">
+				<div class="span5 offset1">
+					<form class="well form-search" method="post" >
+						<input type="text" class="input-small" placeholder="Usuário" name="username">
+						<input type="password" class="input-small" placeholder="Senha" name="password">
+						<button type="submit" class="btn">Entrar</button>
+					</form>
+				</div>
+			</div>
+{% endblock %}

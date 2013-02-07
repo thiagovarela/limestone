@@ -1,0 +1,74 @@
+{% extends 'admin/index.html' %}
+
+{% block page %}
+<div class="page-header">
+	<h3>{{ title }}</h3>
+	<div class="pull-right">
+		<a class="btn btn-primary" href="{{ routes.edit }}">Novo</a>
+		<a class="btn btn-danger" href="#">Excluir</a>
+	</div>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+		<tr>
+			<th width="10px"><input id="all_records" type="checkbox" /></th>
+			{% block tableheader %}
+			{% endblock %}
+		</tr>
+    </thead>
+    <tbody>
+    	{% for record in records %}  
+    	<tr>
+    		<td><input id="record__{{ user.id }}" class="checkbox_record" type="checkbox" /></td>
+			{% block tableresults %}
+			{% endblock %}
+			
+		</tr>
+    	{% endfor %}
+    </tbody>
+</table>
+
+{% if pages %}
+<div class="row span6 offset4">
+<div class="pagination">
+        <ul>
+          {% for page in range(1, pages) %}
+          	<li {% if current_page == page %} class="active" {%endif%} ><a href="?p={{ page }}">{{ page }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+</div>
+{% endif %}
+
+<form id="delete_form" action="{{ routes.delete }}" method="post">
+	<input type="hidden" name="delete_values" id="delete_values">
+    <input type="hidden" name="_METHOD" value="DELETE"/>
+</form>
+
+{% endblock %}
+
+{% block extrascript %}
+	<script>
+		$(document).ready(function() {
+			$('#all_records').toggle(function() {
+			  $(".checkbox_record").attr("checked", true);
+			}, function() {
+			  $(".checkbox_record").attr("checked", false);
+			});
+			
+			$('#btn_delete').click(function() {
+				var v = [];
+				$('input:checked').each(function() {
+					var id = this.id.split("__")[1];
+					v.push(id);
+				});
+				if(v.length) {	
+					$("#delete_values").attr('value', v.join(",") );
+					$("#delete_form").submit();
+				}
+			});
+		});
+	</script>
+{% endblock %}
+

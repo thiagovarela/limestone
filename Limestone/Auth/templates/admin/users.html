@@ -1,0 +1,46 @@
+{% extends 'admin/scaffold_list.html' %}
+
+{% block tableheader %}
+
+<th>Usuário</th>
+<th>E-mail</th>
+<th>Nome</th>
+<th>Sobrenome</th>
+<th>Ativo?</th>
+<th>Equipe?</th>
+<th>Administrador?</th>
+<th>Data de Registro</th>
+<th>Último Login</th>
+
+{% endblock %}
+
+{% block tableresults %}
+    	  
+<td><a href="{{ routes.edit }}/{{ record.id }}">{{ record.username }}</a></td>
+<td>{{ record.email }}</td>
+<td>{{ record.firstName }}</td>
+<td>{{ record.lastName }}</th>
+{% if record.isActive %}
+<td><span class="label label-success" href="#">Sim</span></td>
+{% else %}
+<td><span class="label label-important" href="#">Não</span></td>
+{% endif %}
+
+{% if record.isStaff %}
+<td><span class="label label-success" href="#">Sim</span></td>
+{% else %}
+<td><span class="label label-important" href="#">Não</span></td>
+{% endif %}
+
+
+{% if record.isSuperuser %}
+<td><span class="label label-success" href="#">Sim</span></td>
+{% else %}
+<td><span class="label label-important" href="#">Não</span></td>
+{% endif %}
+
+<td>{{ record.dateJoined|date("d/m/Y") }}</td>
+<td>{{ record.lastLogin is empty ? "" : user.lastLogin|date("d/m/Y") }}</td>
+			
+{% endblock %}
+

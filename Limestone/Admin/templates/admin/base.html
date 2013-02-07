@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>
+	{% block title %} {% if not title %} {{ project_name }} {% else %} {{ title }} {% endif %} | Limestone 
+	{% endblock %}
+	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Varela Admin Panel">
+	<meta name="author" content="Thiago Varela">
+
+
+	<link type="text/css" rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css" >
+	<link type="text/css" rel="stylesheet" id="bs-css" href="/assets/bootstrap/themes/cerulean.css" >
+	
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+	
+	<script type="text/javascript" src="/assets/bootstrap/js/bootstrap.js"></script>
+	
+	<script type="text/javascript" src="/assets/chosen/js/chosen.jquery.js"></script>
+	<link type="text/css" rel="stylesheet" href="/assets/chosen/css/chosen.css">
+
+	<script type="text/javascript" src="/assets/jqueryui/jquery-ui-1.8.23.custom.min.js"></script>
+	
+	<script type="text/javascript" src="/assets/datepicker/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript" src="/assets/datepicker/js/bootstrap-datepicker.br.js"></script>
+	<script type="text/javascript" src="/assets/validator/jq-bootstrap-validation.js"></script>
+	<link type="text/css" rel="stylesheet" href="/assets/datepicker/css/datepicker.css">
+	
+
+	
+	
+	{% block extrahead %}
+	{% endblock %}
+
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+		
+</head>
+
+<body>
+		{% block topbar %}{% endblock %}
+		<div class="container-fluid">
+		
+		{% if flash.error %}
+			<div class="row span5 offset3">
+				<div class="alert alert-error">
+				  <button type="button" class="close" data-dismiss="alert">×</button>
+				  <strong>Erro!</strong> {{ flash.error }}
+				</div>
+			</div>
+		{% endif %}
+		
+		<div class="row-fluid">
+		
+		
+		
+		{% block content %}
+		{% endblock %}
+
+		</div>
+		</div>
+		<br /><br />
+		
+		<footer class="footer">
+			<div class="container">
+				<p>
+				<small>Limestone 1.0 © 2012 - Thiago Varela</small>
+				<br />
+				<small>Utilizando Slim Framework, Twig, RedBean e Twitter Bootstrap</small>
+				</p>
+			</div>
+        </footer>
+		
+		
+		{% block extrascript %}
+		{% endblock %}
+		
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$(function () { $("input,textarea").not("[type=submit]").jqBootstrapValidation(); } );
+		});
+</script>
+
+		
+</body>
+</html>

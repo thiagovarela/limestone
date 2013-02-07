@@ -1,0 +1,20 @@
+{% extends 'admin/scaffold_edit.html' %}
+{% import 'admin/forms.html' as forms %}
+
+{% block formfields %}
+        <fieldset>
+        
+        {{ forms.input('Usuário', 'username', _context['record'], {'required': true} ) }}
+        {{ forms.input('Senha', 'password', _context['record'], {'type': 'password'} ) }}
+        {{ forms.input('Confirmar Senha', 'password2', _context['record'], {'type': 'password', 'match': 'password'} ) }}
+        {{ forms.input('Nome', 'firstName', _context['record']) }}
+        {{ forms.input('Sobrenome', 'lastName', _context['record']) }}
+        
+        {{ forms.input('E-mail', 'email', _context['record'], {'required': true, 'type': 'email'} )}}
+        {{ forms.checkbox('Ativo?', 'isActive', _context['record'] ) }}
+        {{ forms.checkbox('Equipe?', 'isStaff', _context['record'] ) }}
+        {{ forms.checkbox('Administrador?', 'isSuperuser', _context['record'] ) }}
+     
+        </fieldset>
+        
+{% endblock %}

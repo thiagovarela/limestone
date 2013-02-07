@@ -1,0 +1,22 @@
+{% extends 'admin/base.html' %}
+
+{% block topbar %}
+	{% include 'admin/topbar.html' %}
+{% endblock %}
+
+{% block content %}	
+	
+	{% block menu %}
+	{% endblock %}
+	
+	<div id="content" class="span10">
+	
+	{% block page %}
+	<div class="hero-unit">
+		<h1>Administração do {{ project_name }}</h1>
+		<p>Acesse os links ao lado para administrar o conteúdo.</p>
+	</div>
+	{% endblock %}
+	
+	</div>
+{% endblock %}
