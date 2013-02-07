@@ -19,7 +19,6 @@
          "twig/twig": "1.*",
          "symfony/console": "2.*",
          "slim/extras": "2.*",
-         "gabordemooij/redbean": "v3.3.6"
     },
     "autoload": {
         "psr-0": {
