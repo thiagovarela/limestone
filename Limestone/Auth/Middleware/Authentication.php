@@ -21,12 +21,17 @@ class Authentication extends \Slim\Middleware
     	$app->hook("slim.before.router", function() use ($auth, $app) {
 	    	$req = $app->request();
 	        $path = $req->getPath();
+	        if(!defined("LIMESTONE_AUTH_COOKIE_NAME")) {
+		        define("LIMESTONE_AUTH_COOKIE_NAME", "lkf");
+	        }
 	        
-	        $is_logged = $app->getEncryptedCookie("_key");
+	        $is_logged = $app->getEncryptedCookie(LIMESTONE_AUTH_COOKIE_NAME);
 	        $is_secured_path = false;
 	        foreach($auth->secured_paths as $secure) {
 		    	if(strpos($path, $secure) === 0 ) {
-		    		if($path != $auth->login_url && $path != $auth->logout_url) {
+		    		if($path != $auth->login_url 
+		    		&& $path != "/createsuperuser"
+		    		&& $path != $auth->logout_url) {
 				    	$is_secured_path = true;
 			    	}
 		    	}    
