@@ -12,7 +12,7 @@ class ScaffoldAdmin {
 	protected $new_title;
 	
 	private function listRoute($app, $route) {
-		$app->get('/admin/'. $route["route_name"] .'/', function () use ($app, $route) {
+		$app->get($route["route_name"] .'/', function () use ($app, $route) {
 			extract($route);
 			$page = isset($_GET['p']) ? $_GET['p'] : null;
 			$order_fields = isset($_GET['ord_fields']) ? $_GET['ord_fields'] : null;
@@ -28,15 +28,15 @@ class ScaffoldAdmin {
 			    "records" => $records,
 			    "pages" => $pages,
 			    "current_page" => $page,
-			    "routes" => array("edit" => "/admin/". $route_name ."/edit", "delete" => "/admin/". $route_name ."/delete"),
+			    "routes" => array("edit" => $route_name ."/edit", "delete" => $route_name ."/delete"),
 			    "title" => $name_plural
 		    ));
-		    $app->render("admin/". $route_name .".html");
+		    $app->render($route_name .".html");
 		});
 	}
 	
 	private function editRoute($app, $route) {
-		$app->get('/admin/'. $route["route_name"] .'/edit(/:id)', function ($id = null) use ($app, $route) {
+		$app->get($route["route_name"] .'/edit(/:id)', function ($id = null) use ($app, $route) {
 			extract($route);
 			$view = $app->view();
 			$record = \R::load($model, $id);
@@ -52,10 +52,10 @@ class ScaffoldAdmin {
 				    "title" => $new_title
 			    ));
 			} 
-		    $app->render('admin/'. $route_name .'_edit.html');
+		    $app->render($route_name .'_edit.html');
 		});
 		
-		$app->post('/admin/'. $route["route_name"] .'/edit(/:id)', function ($id = null) use ($app, $route) {
+		$app->post($route["route_name"] .'/edit(/:id)', function ($id = null) use ($app, $route) {
 			try {
 				\R::begin();
 				extract($route);
@@ -116,25 +116,25 @@ class ScaffoldAdmin {
 			}
 
 			if(isset($_POST['save'])) {
-				$app->redirect("/admin/". $route_name);
+				$app->redirect($route_name);
 			} else {
-				$app->redirect("/admin/". $route_name ."/edit");
+				$app->redirect($route_name ."/edit");
 			}
 		   
 		});
 	}
 	
 	private function deleteRoute($app, $route) {
-		$app->delete('/admin/'. $route["route_name"] .'/delete', function () use ($app, $route) {
+		$app->delete($route["route_name"] .'/delete', function () use ($app, $route) {
 			extract($route);
 			$records = \R::batch($model, explode(",", $_POST['delete_values']));
 			\R::trashAll($records);
-			$app->redirect("/admin/" . $route_name);
+			$app->redirect($route_name);
 		});		
 	}
 	
 	private function jsonAllRoute($app, $route) {
-		$app->get('/'. $route["route_name"] .'/all.json', function () use ($app, $route) {
+		$app->get($route["route_name"] .'/all.json', function () use ($app, $route) {
 			$model = $route["model"];
 			$records = \R::findAll($model);
 			if(count($records) > 0) {

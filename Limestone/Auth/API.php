@@ -44,7 +44,7 @@ class API implements \Limestone\IModule {
 	
 	public function applyRoutes($app) {
 		
-		$app->get('/limestone/createsuperuser', function () use ($app) {
+		$app->get('/createsuperuser', function () use ($app) {
 			$user = \R::dispense("user");
 			$user->importArray($_GET);
 			$user->isActive = true;
