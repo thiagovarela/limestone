@@ -155,7 +155,7 @@ class Model extends \RedBean_SimpleModel {
 	public function after_update() {		
 		if($this->tainted_before_update) {
 			$app = \Slim\Slim::getInstance();
-			$user_key = $app->getEncryptedCookie("_key");
+			$user_key = $app->getEncryptedCookie(LIMESTONE_AUTH_COOKIE_NAME);
 			$audit = \R::dispense("audit");
 			$audit->model = $this->bean->getMeta("type");
 			$audit->model_id = $this->bean->id;

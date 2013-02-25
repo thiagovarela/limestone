@@ -30,7 +30,7 @@ class Module implements \Limestone\IModule {
 			$password = $_POST["password"];
 			$user = \R::findOne('user', 'username = ?', array($username));
 			if($user && $user->checkPassword($password)) {
-				$app->setEncryptedCookie("_key", $user->id, "2 hours");
+				$app->setEncryptedCookie(LIMESTONE_AUTH_COOKIE_NAME, $user->id, "2 hours");
 				$app->redirect('/admin');
 				$user->lastLogin = new \DateTime();
 				\R::store($user);					
@@ -41,7 +41,7 @@ class Module implements \Limestone\IModule {
 		});
 		
 		$app->get('/admin/logout', function () use ($app) {
-			$app->deleteCookie('_key');
+			$app->deleteCookie(LIMESTONE_AUTH_COOKIE_NAME);
 		    $app->redirect('/admin');
 		});
 		

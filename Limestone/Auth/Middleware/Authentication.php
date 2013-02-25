@@ -21,9 +21,6 @@ class Authentication extends \Slim\Middleware
     	$app->hook("slim.before.router", function() use ($auth, $app) {
 	    	$req = $app->request();
 	        $path = $req->getPath();
-	        if(!defined("LIMESTONE_AUTH_COOKIE_NAME")) {
-		        define("LIMESTONE_AUTH_COOKIE_NAME", "lkf");
-	        }
 	        
 	        $is_logged = $app->getEncryptedCookie(LIMESTONE_AUTH_COOKIE_NAME);
 	        $is_secured_path = false;

@@ -56,7 +56,7 @@ class API implements \Limestone\IModule {
 		
 		$app->post('/admin/users/changepassword.json', function () use ($app) {
 			$result = array();
-			$user = \R::load("user", $app->getEncryptedCookie("_key"));
+			$user = \R::load("user", $app->getEncryptedCookie(LIMESTONE_AUTH_COOKIE_NAME));
 			if($user->id) {
 				$success = $user->changePassword($_POST["current"], $_POST["password"]);
 				if($success) {

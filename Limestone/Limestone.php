@@ -84,6 +84,9 @@ class Limestone {
 		$app->flash("error", $message);
 		
 	}
-	
-	
+
+}
+
+if(!defined("LIMESTONE_AUTH_COOKIE_NAME")) {
+    define("LIMESTONE_AUTH_COOKIE_NAME", "lkf");
 }
