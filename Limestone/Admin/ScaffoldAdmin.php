@@ -21,7 +21,9 @@ class ScaffoldAdmin {
 			$records = \R::findAll($model, $searchHelper->getSql());
 			if(count($records) > 0) {
 				$relations = \R::dispense($model)->getRelations();
-				\R::preload($records, $relations);
+				if($relations) {
+					\R::preload($records, $relations);	
+				}
 			}
 			$pages = $searchHelper->getPages(\R::count($model)); 
 			$view = $app->view();
