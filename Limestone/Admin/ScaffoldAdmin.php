@@ -6,6 +6,7 @@ class ScaffoldAdmin {
 	protected $routes;
 	
 	protected $route_name;
+	protected $template_name;
 	protected $model;
 	protected $name;
 	protected $name_plural;
@@ -31,7 +32,7 @@ class ScaffoldAdmin {
 			    "routes" => array("edit" => $route_name ."/edit", "delete" => $route_name ."/delete"),
 			    "title" => $name_plural
 		    ));
-		    $app->render($route_name .".html");
+		    $app->render($template_name .".html");
 		});
 	}
 	
@@ -52,7 +53,7 @@ class ScaffoldAdmin {
 				    "title" => $new_title
 			    ));
 			} 
-		    $app->render($route_name .'_edit.html');
+		    $app->render($template_name .'_edit.html');
 		});
 		
 		$app->post($route["route_name"] .'/edit(/:id)', function ($id = null) use ($app, $route) {
